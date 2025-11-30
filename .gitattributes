@@ -1,0 +1,2 @@
+# Dile a Git que los PDF son binarios y no toque las líneas
+*.pdf binary

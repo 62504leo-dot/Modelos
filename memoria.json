@@ -1,0 +1,44 @@
+{
+  "history": [
+    {
+      "type": "human",
+      "content": "mi color favorito es el rojo"
+    },
+    {
+      "type": "ai",
+      "content": "¡Entendido! Tu color favorito es el rojo. Lo recordaré."
+    },
+    {
+      "type": "human",
+      "content": "recuerdas mi color favorito?"
+    },
+    {
+      "type": "ai",
+      "content": "Sí, lo recuerdo. Tu color favorito es el **rojo**."
+    },
+    {
+      "type": "human",
+      "content": "mi color favorito es el verde"
+    },
+    {
+      "type": "ai",
+      "content": "¡Perfecto! He actualizado tu color favorito. Ahora tu color favorito es el **verde**."
+    },
+    {
+      "type": "human",
+      "content": "recuerdas mi color favorito"
+    },
+    {
+      "type": "ai",
+      "content": "Sí, lo recuerdo. Tu color favorito es el **verde**."
+    },
+    {
+      "type": "human",
+      "content": "mi peli favorita es cars"
+    },
+    {
+      "type": "ai",
+      "content": "¡Entendido! Tu película favorita es **Cars**. Lo he anotado."
+    }
+  ]
+}

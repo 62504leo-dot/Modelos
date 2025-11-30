@@ -1,53 +1,87 @@
-# Contenido COMPLETO para: load/load_ventana_principal.py
+# Archivo: load/load_ventana_principal.py
 from PyQt5 import QtWidgets, uic
 
-# --- Importamos las clases de las VENTANAS ---
+# 1. Importar ventanas secundarias
 from .load_ventana_modelos_basicos import Load_ventana_modelos_basicos
 from .load_ventana_modelos_LangChain import LoadVentanaLangChain
 
-# --- Importamos los "MOTORES BÁSICOS" ---
-from main import crear_modelo_simple
-from main_historial import crear_modelo_historial
-from main_memoria import crear_modelo_chat_limitado
+# 2. Importar lógica de modelos básicos
+# (Asegúrate de que main.py, main_historial.py, etc. existan y funcionen)
+try:
+    from main import crear_modelo_simple
+    from main_historial import crear_modelo_historial
+    from main_memoria import crear_modelo_chat_limitado
+except ImportError as e:
+    print(f"Advertencia: No se pudieron importar modelos básicos: {e}")
 
-# --- Importamos los "MOTORES LANGCHAIN" ---
-# Motor 1: Básico
-from lc_1_llmchain import crear_chain_llmchain 
-# Motor 2: Secuencial (¡NUEVO!)
-from lc_2_sequientialchain import crear_chain_secuencial 
+# 3. Importar lógica de LangChain
+# (Asegúrate de que estos archivos existan en la carpeta principal)
+try:
+    from lc_1_llmchain import crear_chain_llmchain 
+    from lc_2_sequientialchain import crear_chain_secuencial 
+    from lc_3_simplesequientialchain import crear_chain_simple_secuencial
+    from lc_4_parseo import crear_chain_parser
+    from lc_5_varios_pasos import crear_chain_varios_pasos
+    from lc_6_memoria import ejecutar_con_memoria
+    from lc_7_persistencia import ejecutar_con_persistencia
+    from lc_8_rag import crear_chain_rag
+except ImportError as e:
+    
+    print(f"Advertencia: No se pudieron importar modelos LangChain: {e}")
 
-from lc_3_simplesequientialchain import crear_chain_simple_secuencial
 
 class Load_ventana_principal(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("interfaces/ventana_principal.ui", self)
-        self.showMaximized()
+        # Cargar el UI
+        try:
+            uic.loadUi("interfaces/ventana_principal.ui", self)
+        except Exception as e:
+            print(f"Error cargando UI principal: {e}")
+            return
 
-        print("Cargando modelos... (Esto puede tardar un momento)")
+        self.showMaximized()
+        print("Cargando modelos...")
         
-        # --- 1. Cargamos los motores BÁSICOS ---
+        # --- INICIALIZAR MODELOS BÁSICOS ---
+        self.modelo_simple_cargado = None
+        self.modelo_historial_cargado = None
+        self.modelo_chat_cargado = None
+        
         try:
             self.modelo_simple_cargado = crear_modelo_simple()
             self.modelo_historial_cargado = crear_modelo_historial()
             self.modelo_chat_cargado = crear_modelo_chat_limitado()
+           
         except Exception as e:
-            print(f"Error cargando básicos: {e}")
-        
-        # --- 2. Cargamos los motores LANGCHAIN ---
+            print(f"Error inicializando básicos: {e}")
+
+        # --- INICIALIZAR MODELOS LANGCHAIN ---
+        self.lc_chain_1 = None
+        self.lc_chain_2 = None
+        self.lc_chain_3 = None
+        self.lc_chain_4 = None
+        self.lc_chain_5 = None
+        self.lc_chain_6 = None
+        self.lc_chain_7= None
+        self.lc_chain_8= None
         try:
-            self.lc_chain_1 = crear_chain_llmchain()      # Motor 1
-            self.lc_chain_2 = crear_chain_secuencial()    # Motor 2 (¡Agregado!)
-            self.lc_chain_3 = crear_chain_simple_secuencial()   
+            self.lc_chain_1 = crear_chain_llmchain()
+            self.lc_chain_2 = crear_chain_secuencial()
+            self.lc_chain_3 = crear_chain_simple_secuencial()
+            self.lc_chain_4 = crear_chain_parser()
+            self.lc_chain_5 = crear_chain_varios_pasos()
+            self.lc_chain_6= ejecutar_con_memoria
+            self.lc_chain_7 = ejecutar_con_persistencia
+            self.lc_chain_8 = crear_chain_rag()
+         
         except Exception as e:
-            print(f"Error cargando LangChain: {e}")
-            self.lc_chain_1 = None
-            self.lc_chain_2 = None
-            self.lc_chain_3= None
+            print(f"Error inicializando LangChain (Verifica tus archivos lc_*.py): {e}")
 
-        print("¡Modelos cargados y listos!")
+        print("¡Sistema listo!")
 
-        # Conectamos las acciones del menú
+        # Conectar Botones del Menú
+        # (Asegúrate de que estos nombres coincidan con tu ventana_principal.ui)
         self.actionBasicos.triggered.connect(self.abrirVentanaBasico)
         self.actionLangChain.triggered.connect(self.abrirVentanaLangchain)
         self.actionSalir.triggered.connect(self.cerrarVentana)
@@ -60,18 +94,16 @@ class Load_ventana_principal(QtWidgets.QMainWindow):
         )
         self.basicos.exec_()
     
-    
     def abrirVentanaLangchain(self):
-        # Aquí pasamos los motores a la ventana
         self.LangChain = LoadVentanaLangChain(
             chain_1=self.lc_chain_1, 
-            chain_2=self.lc_chain_2, # <--- ¡AQUÍ CONECTAMOS EL MOTOR 2!
+            chain_2=self.lc_chain_2,
             chain_3=self.lc_chain_3,
-            chain_4=None,
-            chain_5=None,
-            chain_6=None,
-            chain_7=None,
-            chain_8=None
+            chain_4=self.lc_chain_4,
+            chain_5=self.lc_chain_5,
+            chain_6=self.lc_chain_6,
+            chain_7=self.lc_chain_7,
+            chain_8=self.lc_chain_8,
         )
         self.LangChain.exec_()
 

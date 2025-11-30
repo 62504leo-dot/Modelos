@@ -1,0 +1,13 @@
+# --- Ignorar Entorno Virtual (Son miles de archivos pesados) ---
+venv/
+env/
+
+# --- Ignorar Secretos (TU API KEY) ---
+.env
+
+# --- Ignorar Cache de Python ---
+__pycache__/
+*.pyc
+
+# --- Ignorar Indices Vectoriales (Opcional, si pesan mucho) ---
+# faiss_index_google/
